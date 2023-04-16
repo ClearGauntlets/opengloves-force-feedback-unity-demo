@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
-
 public class Carousel : MonoBehaviour
 {
 
@@ -11,13 +10,15 @@ public class Carousel : MonoBehaviour
 
     public void Start()
     {
-        hoverButton.onButtonDown.AddListener(OnButtonDown);
+        hoverButton.onButtonIsPressed.AddListener(OnButtonPressed);
     }
 
-    private void OnButtonDown(Hand hand)
+    private void OnButtonPressed(Hand hand)
     {
         // Rotate the carousel 72 degrees
-        carousel.transform.Rotate(0f, 72f, 0f);
-        Debug.Log("SPIIINNNNNN!!!!!");
+        transform.Rotate(0f, 72f, 0f);
+        transform.Translate(-transform.right, Space.World);
+        Debug.Log("SPINNNNN!!!!!");
+        Debug.Log(carousel.transform.position);
     }
 }
