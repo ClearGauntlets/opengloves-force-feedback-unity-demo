@@ -75,7 +75,7 @@ public class FFBManager : MonoBehaviour
         for (int boneIndex = 0; boneIndex < skeleton.bonePositions.Length; boneIndex++)
         {
             //calculate open hand angle to poser animation
-            float openToPoser = Quaternion.Angle(openHand.boneRotations[boneIndex], skeleton.boneRotations[boneIndex]);
+            float openToPoser = Quaternion.Angle(openHand.boneRotations[boneIndex], skeleton.boneRotations[boneIndex]) * 1.4f;
             
             //calculate angle from open to closed
             float openToClosed =
@@ -174,7 +174,19 @@ class FFBProvider
    
     public bool SetFFB(VRFFBInput input)
     {
-         return _namedPipeProvider.Send(input);
+        try
+        {
+            _namedPipeProvider.Send(input);
+            return true;
+        }
+        catch (IOException e)
+        {
+            Debug.Log(e.Message);
+            Debug.Log("Attempting Re-Connection...");
+            _namedPipeProvider.Disconnect();
+            _namedPipeProvider = new NamedPipesProvider(controllerRole);
+            return false;
+        }
     }
 
     public void Close()
